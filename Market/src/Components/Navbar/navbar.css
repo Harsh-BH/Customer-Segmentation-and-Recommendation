@@ -1,0 +1,92 @@
+/* Navbar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  z-index: 1000; /* Ensure it's above other content */
+  transition: top 0.3s ease; /* Smooth transition for hiding/showing */
+
+  /* Animation */
+  animation: slideDown 0.5s ease;
+  animation-fill-mode: forwards;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo styling */
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+  color: #f4f4f4;
+}
+
+/* Links container */
+.navbar-links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual link styling */
+.navbar-links li {
+  margin-right: 10px;
+}
+
+/* Link anchor styling */
+.navbar-links li a {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 5px;
+  font-family: "Arial", sans-serif;
+}
+
+/* Hover effect for links */
+.navbar-links li a:hover {
+  background-color: #555;
+  transform: scale(1.05);
+}
+
+/* Keyframes for slide-down animation */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 15px 20px;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-links li {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+  }
+
+  .navbar-links li a {
+    width: 100%;
+    display: block;
+  }
+}
