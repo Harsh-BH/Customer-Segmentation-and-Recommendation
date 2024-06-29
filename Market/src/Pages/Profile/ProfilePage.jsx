@@ -51,25 +51,25 @@ const Profile = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          // Ensure nested objects are not null or undefined
+          const purchases = data.purchases || {
+            wines: 0,
+            fruits: 0,
+            meat: 0,
+            fish: 0,
+            sweets: 0,
+            gold: 0,
+          };
+          const numDealsPurchases = Object.values(purchases).reduce(
+            (a, b) => a + b,
+            0
+          );
+
           setCustomer({
             ...data,
-            purchases: data.purchases || {
-              wines: 0,
-              fruits: 0,
-              meat: 0,
-              fish: 0,
-              sweets: 0,
-              gold: 0,
-            },
-            promotion: data.promotion || {
-              NumDealsPurchases: 0,
-              AcceptedCmp1: 0,
-              AcceptedCmp2: 0,
-              AcceptedCmp3: 0,
-              AcceptedCmp4: 0,
-              AcceptedCmp5: 0,
-              Response: 0,
+            purchases,
+            promotion: {
+              ...data.promotion,
+              NumDealsPurchases: numDealsPurchases,
             },
             place: data.place || {
               NumWebPurchases: 0,
@@ -112,7 +112,19 @@ const Profile = () => {
   const handleSaveClick = async () => {
     setIsEditing(false);
     try {
-      await setDoc(doc(db, "customers", currentUser.uid), customer);
+      // Calculate NumDealsPurchases before saving
+      const numDealsPurchases = Object.values(customer.purchases).reduce(
+        (a, b) => a + b,
+        0
+      );
+      const updatedCustomer = {
+        ...customer,
+        promotion: {
+          ...customer.promotion,
+          NumDealsPurchases: numDealsPurchases,
+        },
+      };
+      await setDoc(doc(db, "customers", currentUser.uid), updatedCustomer);
     } catch (error) {
       console.error("Error saving document: ", error);
     }

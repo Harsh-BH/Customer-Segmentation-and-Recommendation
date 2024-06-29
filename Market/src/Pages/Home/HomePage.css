@@ -33,14 +33,17 @@ header {
   background-color: #0056b3;
 }
 
-.catalog-container {
+.catalog-container,
+.discount-container {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-.catalog-grid {
+.catalog-grid,
+.discount-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -48,7 +51,8 @@ header {
   margin-top: 20px;
 }
 
-.catalog-item {
+.catalog-item,
+.discount-item {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -60,7 +64,8 @@ header {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.catalog-item:hover {
+.catalog-item:hover,
+.discount-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }

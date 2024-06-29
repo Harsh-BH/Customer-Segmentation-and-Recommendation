@@ -26,6 +26,21 @@ const HomePage = () => {
     navigate(`/products/${category}`);
   };
 
+  const handleDiscountClick = async (category, campaign) => {
+    if (currentUser) {
+      try {
+        const userRef = doc(db, "customers", currentUser.uid); // Reference to the customer's document
+        await updateDoc(userRef, {
+          [`promotion.${campaign}`]: increment(1), // Increment the specific campaign
+        });
+        console.log(`Incremented ${campaign} for user ${currentUser.uid}`);
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      }
+    }
+    navigate(`/products/${category}?discount=true`);
+  };
+
   return (
     <div className="homepage-container">
       <header>
@@ -77,6 +92,41 @@ const HomePage = () => {
             className="catalog-item"
           >
             Gold
+          </button>
+        </div>
+      </div>
+      <div className="discount-container">
+        <h2>Discount Offers</h2>
+        <div className="discount-grid">
+          <button
+            onClick={() => handleDiscountClick("wineProducts", "AcceptedCmp1")}
+            className="discount-item"
+          >
+            Wine Discount
+          </button>
+          <button
+            onClick={() => handleDiscountClick("fruitProducts", "AcceptedCmp2")}
+            className="discount-item"
+          >
+            Fruit Discount
+          </button>
+          <button
+            onClick={() => handleDiscountClick("meatProducts", "AcceptedCmp3")}
+            className="discount-item"
+          >
+            Meat Discount
+          </button>
+          <button
+            onClick={() => handleDiscountClick("fishProducts", "AcceptedCmp4")}
+            className="discount-item"
+          >
+            Fish Discount
+          </button>
+          <button
+            onClick={() => handleDiscountClick("sweets", "AcceptedCmp5")}
+            className="discount-item"
+          >
+            Sweets Discount
           </button>
         </div>
       </div>
