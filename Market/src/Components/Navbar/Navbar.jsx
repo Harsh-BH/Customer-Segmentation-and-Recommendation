@@ -1,10 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Assuming you use React Router
-import "./navbar.css"; // Import your CSS file
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import "./navbar.css";
 
 const Navbar = ({ showNavbar }) => {
+  const { currentUser, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
+  };
+
   if (!showNavbar) {
-    return null; // Don't render the navbar if showNavbar is false
+    return null;
   }
 
   return (
@@ -12,17 +23,21 @@ const Navbar = ({ showNavbar }) => {
       <div className="navbar-logo">Logo</div>
       <ul className="navbar-links">
         <li>
-          <Link to="/homepage">Home</Link>
+          <Link to="/homePage">Home</Link>
         </li>
         <li>
           <Link to="/products">Products</Link>
         </li>
-        <li>
-          <Link to="/services">Services</Link>
-        </li>
-        <li>
-          <Link to="/contact">Contact</Link>
-        </li>
+        {currentUser && (
+          <>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+            <li>
+              <button onClick={handleLogout}>Logout</button>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );

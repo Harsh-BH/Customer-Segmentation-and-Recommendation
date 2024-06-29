@@ -1,120 +1,133 @@
 import React, { useState } from "react";
-import styles from "./Login.module.css"; // Import your CSS module
+import { useAuth } from "../../contexts/AuthContext";
+import { db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid"; // Import uuid
 
-const Login = ({ onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true); // Initially show login form
+const Login = () => {
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); // For signup form
+  const [name, setName] = useState("");
+  const { login, signup } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLoginClick = () => {
-    setIsLogin(true);
-  };
-
-  const handleSignupClick = () => {
-    setIsLogin(false);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleLoginSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Implement authentication logic here
-    // For simplicity, checking hardcoded credentials
-    if (email === "user@example.com" && password === "password") {
-      onLogin(); // Call the onLogin function passed as prop
-    } else {
-      alert("Invalid credentials. Please try again.");
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to log in", error);
     }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    // Implement signup logic here
-    // For simplicity, just console logging signup data
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    // You can add further logic like sending signup request to server
+    try {
+      const userCredential = await signup(email, password);
+      const user = userCredential.user;
+
+      // Generate a unique ID for the user's profile document
+      const uniqueID = uuidv4();
+
+      await setDoc(doc(db, "customers", user.uid), {
+        id: uniqueID,
+        name: name,
+        email: email,
+        year_birth: "",
+        education: "",
+        marital_status: "",
+        income: "",
+        kidhome: "",
+        teenhome: "",
+        dt_customer: new Date().toISOString(),
+        recency: "",
+        complain: "",
+        purchases: {
+          wines: 0,
+          fruits: 0,
+          meat: 0,
+          fish: 0,
+          sweets: 0,
+          gold: 0,
+        },
+        promotion: {
+          NumDealsPurchases: 0,
+          AcceptedCmp1: 0,
+          AcceptedCmp2: 0,
+          AcceptedCmp3: 0,
+          AcceptedCmp4: 0,
+          AcceptedCmp5: 0,
+          Response: 0,
+        },
+        place: {
+          NumWebPurchases: 0,
+          NumCatalogPurchases: 0,
+          NumStorePurchases: 0,
+          NumWebVisitsMonth: 0,
+        },
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to sign up", error);
+    }
   };
 
   return (
-    <div className={styles["form-structor"]}>
-      <div className={`${styles.signup} ${isLogin ? styles["slide-up"] : ""}`}>
-        <h2
-          className={styles["form-title"]}
-          id="signup"
-          onClick={handleSignupClick}
-        >
-          <span>or</span>Sign up
-        </h2>
-        <div className={styles["form-holder"]}>
-          <input
-            type="text"
-            className={styles.input}
-            placeholder="Name"
-            value={name}
-            onChange={handleNameChange}
-          />
+    <div>
+      {isLogin ? (
+        <form onSubmit={handleLogin}>
+          <h2>Login</h2>
           <input
             type="email"
-            className={styles.input}
             placeholder="Email"
             value={email}
-            onChange={handleEmailChange}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
-            className={styles.input}
             placeholder="Password"
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-        </div>
-        <button className={styles["submit-btn"]} onClick={handleSignupSubmit}>
-          Sign up
-        </button>
-      </div>
-      <div className={`${styles.login} ${!isLogin ? styles["slide-up"] : ""}`}>
-        <div className={styles.center}>
-          <h2
-            className={styles["form-title"]}
-            id="login"
-            onClick={handleLoginClick}
-          >
-            <span>or</span>Log in
-          </h2>
-          <div className={styles["form-holder"]}>
-            <input
-              type="email"
-              className={styles.input}
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-            />
-            <input
-              type="password"
-              className={styles.input}
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <button className={styles["submit-btn"]} onClick={handleLoginSubmit}>
-            Log in
-          </button>
-        </div>
-      </div>
+          <button type="submit">Login</button>
+          <p onClick={() => setIsLogin(false)}>
+            Don't have an account? Sign up
+          </p>
+        </form>
+      ) : (
+        <form onSubmit={handleSignup}>
+          <h2>Sign Up</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign Up</button>
+          <p onClick={() => setIsLogin(true)}>Already have an account? Login</p>
+        </form>
+      )}
     </div>
   );
 };

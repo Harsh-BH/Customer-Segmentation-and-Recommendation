@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,49 +7,44 @@ import {
 } from "react-router-dom";
 import Home from "./Pages/Home";
 import ProductPage from "./Pages/ProductPage";
+import Profile from "./Pages/Profile";
+import Login from "./Pages/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
-// Define PrivateRoute component outside of App component
-const PrivateRoute = ({ element, isAuthenticated }) => {
-  return isAuthenticated ? element : <Navigate to="/" />;
+const PrivateRoute = ({ element }) => {
+  const { currentUser } = useAuth();
+  return currentUser ? element : <Navigate to="/login" />;
 };
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Assume authenticated on app load
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-  };
-
+const App = () => {
   return (
     <Router>
-      <Navbar showNavbar={isAuthenticated} />
-      <Routes>
-        {/* Route for homePage */}
-        <Route
-          path="/homePage"
-          element={
-            <PrivateRoute
-              element={<Home />}
-              isAuthenticated={isAuthenticated}
-            />
-          }
-        />
-        {/* Route for products */}
-        <Route
-          path="/products"
-          element={
-            <PrivateRoute
-              element={<ProductPage />}
-              isAuthenticated={isAuthenticated}
-            />
-          }
-        />
-        {/* Fallback route, redirect to homePage */}
-        <Route path="*" element={<Navigate to="/homePage" />} />
-      </Routes>
+      <AuthProvider>
+        <Navbar showNavbar={true} />
+        <Routes>
+          <Route
+            path="/homePage"
+            element={<PrivateRoute element={<Home />} />}
+          />
+          <Route
+            path="/products/:category"
+            element={<PrivateRoute element={<ProductPage />} />}
+          />
+          <Route
+            path="/products"
+            element={<PrivateRoute element={<ProductPage />} />}
+          />
+          <Route
+            path="/profile"
+            element={<PrivateRoute element={<Profile />} />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/homePage" />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
-}
+};
 
 export default App;
