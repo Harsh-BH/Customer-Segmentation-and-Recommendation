@@ -2,21 +2,38 @@
 .navbar {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #333;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1800px;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b); /* Gradient background */
   color: #fff;
   padding: 10px 20px;
   z-index: 1000; /* Ensure it's above other content */
-  transition: top 0.3s ease; /* Smooth transition for hiding/showing */
-
-  /* Animation */
-  animation: slideDown 0.5s ease;
-  animation-fill-mode: forwards;
-
+  transition: top 0.3s ease, transform 0.3s ease; /* Smooth transition for hiding/showing */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Additional styles for visibility transitions */
+.navbar-visible {
+  top: 20px;
+  opacity: 1;
+  transition: top 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-hidden {
+  top: -100px;
+  opacity: 0;
+  transition: top 0.3s ease, opacity 0.3s ease;
+}
+
+/* Main content adjustment to prevent overlap */
+.main-content {
+  margin-top: 80px; /* Adjust this value to match the height of the navbar */
 }
 
 /* Logo styling */
@@ -24,7 +41,8 @@
   font-size: 1.8rem;
   font-weight: bold;
   font-family: "Arial", sans-serif;
-  color: #f4f4f4;
+  color: #fff;
+  transition: transform 0.3s ease;
 }
 
 /* Links container */
@@ -53,7 +71,24 @@
 
 /* Hover effect for links */
 .navbar-links li a:hover {
-  background-color: #555;
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Button styling */
+.navbar-links li button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 5px;
+  font-family: "Arial", sans-serif;
+  cursor: pointer;
+}
+
+.navbar-links li button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
 
@@ -85,7 +120,8 @@
     margin: 10px 0;
   }
 
-  .navbar-links li a {
+  .navbar-links li a,
+  .navbar-links li button {
     width: 100%;
     display: block;
   }

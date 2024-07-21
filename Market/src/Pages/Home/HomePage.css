@@ -1,11 +1,13 @@
-/* src/components/HomePage.css */
+/* HomePage container */
 .homepage-container {
-  width: 80%;
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
 }
 
+/* Header styling */
 header {
   display: flex;
   justify-content: space-between;
@@ -33,6 +35,7 @@ header {
   background-color: #0056b3;
 }
 
+/* Container styling for catalog and discount sections */
 .catalog-container,
 .discount-container {
   background-color: #f9f9f9;
@@ -42,6 +45,7 @@ header {
   margin-bottom: 20px;
 }
 
+/* Grid styling for catalog and discount items */
 .catalog-grid,
 .discount-grid {
   display: flex;
@@ -51,6 +55,7 @@ header {
   margin-top: 20px;
 }
 
+/* Individual item styling */
 .catalog-item,
 .discount-item {
   background-color: white;
@@ -62,10 +67,39 @@ header {
   width: calc(33% - 40px);
   box-sizing: border-box;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Hover effect for items */
 .catalog-item:hover,
 .discount-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation for item appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .catalog-item,
+  .discount-item {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-item,
+  .discount-item {
+    width: 100%;
+  }
 }

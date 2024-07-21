@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans");
+
+
+
+.login-container {
+  display: flex;
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+
+}
+
+.image-section {
+  flex: 1;
+  background: url('/home/harsh-bhatt/Desktop/Customer-Segmentation-and-Recommendation/Market/public/a6a9715630d57ab92852b87153acf0cb.jpg') no-repeat center center/cover;
+}
+
+.form-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f7f7;
+}
+
+.form-structor {
+  background-color: #ffffff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.form-holder {
+  background-color: #fff;
+  padding: 20px 25px;
+  margin-top: 30px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  border-bottom: 2px solid #eee;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-bottom-color: #3498db;
+}
+
+.input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.submit-btn {
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 30px;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.form-title {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.form-title span {
+  font-weight: 400;
+}
+
+.toggle-btn {
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+.toggle-btn:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: 100vh; /* Ensure full viewport height on small screens */
+  }
+
+  .image-section {
+    height: 50vh; /* Adjust height for better view on small screens */
+    flex: none;
+  }
+
+  .form-section {
+    height: 50vh; /* Adjust height for better view on small screens */
+    flex: none;
+  }
+
+  .form-structor {
+    width: 90%;
+    max-width: none;
+  }
+}

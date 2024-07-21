@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./navbar.css";
 
 const Navbar = ({ showNavbar }) => {
   const { currentUser, logout } = useAuth();
+  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+  const [visible, setVisible] = useState(true);
 
   const handleLogout = async () => {
     try {
@@ -14,12 +16,23 @@ const Navbar = ({ showNavbar }) => {
     }
   };
 
+  const handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+    setPrevScrollPos(currentScrollPos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScrollPos, visible, handleScroll]);
+
   if (!showNavbar) {
     return null;
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${visible ? "navbar-visible" : "navbar-hidden"}`}>
       <div className="navbar-logo">Logo</div>
       <ul className="navbar-links">
         <li>

@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import Home from "./Pages/Home";
 import ProductPage from "./Pages/ProductPage";
@@ -17,33 +18,46 @@ const PrivateRoute = ({ element }) => {
   return currentUser ? element : <Navigate to="/login" />;
 };
 
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+
+  return (
+    <>
+      {!isLoginPage && <Navbar showNavbar={true} />}
+      <div className={isLoginPage ? "" : "main-content"}>{children}</div>
+    </>
+  );
+};
+
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <Navbar showNavbar={true} />
-        <Routes>
-          <Route
-            path="/homePage"
-            element={<PrivateRoute element={<Home />} />}
-          />
-          <Route
-            path="/products/:category"
-            element={<PrivateRoute element={<ProductPage />} />}
-          />
-          <Route
-            path="/products"
-            element={<PrivateRoute element={<ProductPage />} />}
-          />
-          <Route
-            path="/profile"
-            element={<PrivateRoute element={<Profile />} />}
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/homePage" />} />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route
+              path="/homePage"
+              element={<PrivateRoute element={<Home />} />}
+            />
+            <Route
+              path="/products/:category"
+              element={<PrivateRoute element={<ProductPage />} />}
+            />
+            <Route
+              path="/products"
+              element={<PrivateRoute element={<ProductPage />} />}
+            />
+            <Route
+              path="/profile"
+              element={<PrivateRoute element={<Profile />} />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/homePage" />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   );
 };
 
